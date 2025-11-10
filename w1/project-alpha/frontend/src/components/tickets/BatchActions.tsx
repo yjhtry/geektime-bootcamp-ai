@@ -59,17 +59,17 @@ export default function BatchActions({
   }
 
   return (
-    <div className="sticky top-0 z-10 bg-white border-b p-4 shadow-sm">
+    <div className="sticky top-20 z-10 bg-white/90 backdrop-apple border-b border-black/5 p-4 rounded-2xl shadow-apple mb-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <span className="text-sm font-medium text-gray-700">
+          <span className="text-[15px] font-semibold text-[#1d1d1f]">
             已选择 {selectedIds.length} 项
           </span>
           <Button
             variant="ghost"
             size="sm"
             onClick={onClearSelection}
-            className="h-8"
+            className="h-9 rounded-full text-[#0071e3] hover:text-[#0077ed] hover:bg-[#0071e3]/10 transition-apple"
           >
             <X className="h-4 w-4 mr-1" />
             取消选择
@@ -78,20 +78,20 @@ export default function BatchActions({
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
-            size="sm"
+            size="default"
             onClick={handleBatchComplete}
             disabled={isProcessing}
-            className="gap-2"
+            className="gap-2 h-10 px-4 rounded-full border-black/10 text-[#1d1d1f] font-medium hover:bg-black/5 transition-apple"
           >
             <CheckCircle2 className="h-4 w-4" />
             批量完成
           </Button>
           <Button
             variant="outline"
-            size="sm"
+            size="default"
             onClick={handleBatchDelete}
             disabled={isProcessing}
-            className="gap-2 text-red-600 hover:text-red-700"
+            className="gap-2 h-10 px-4 rounded-full border-red-200 text-[#ff3b30] hover:text-[#ff453a] hover:bg-red-50 font-medium transition-apple"
           >
             <Trash2 className="h-4 w-4" />
             批量删除

@@ -163,11 +163,31 @@ ENVIRONMENT=production
 ALLOWED_ORIGINS=https://yourdomain.com
 ```
 
-### 启动脚本
+### 启动应用
 
-使用 `start.sh` 脚本同时启动前后端：
+使用 Makefile 启动应用（推荐，从项目根目录运行）：
 
 ```bash
+# 从项目根目录运行
+cd /Users/tchen/projects/mycode/bootcamp/ai
+
+# 启动应用
+make w1-start
+
+# 停止应用
+make w1-stop
+
+# 安装依赖
+make w1-install
+
+# 查看所有可用命令
+make help
+```
+
+或者使用 `start.sh` 脚本（已废弃，推荐使用 Makefile）：
+
+```bash
+cd w1/project-alpha
 chmod +x start.sh
 ./start.sh
 ```

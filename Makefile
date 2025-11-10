@@ -1,83 +1,95 @@
-# Makefile for AI Bootcamp Presentations
-# Provides convenient access to the presentations app
+.PHONY: help w1-start w1-stop w1-clean w1-install w1-build-frontend
 
-.PHONY: help install dev build preview clean status
+# Variables
+PROJECT_DIR := w1/project-alpha
+BACKEND_DIR := $(PROJECT_DIR)/backend
+FRONTEND_DIR := $(PROJECT_DIR)/frontend
+PID_FILE := .pids
 
-# Default target - show help
-help:
-	@echo "════════════════════════════════════════════════════════════"
-	@echo "  AI Bootcamp - Presentations Management"
-	@echo "════════════════════════════════════════════════════════════"
+help: ## Show this help message
+	@echo "Project Alpha - Makefile Commands"
 	@echo ""
-	@echo "Available targets:"
+	@echo "Usage: make [target]"
 	@echo ""
-	@echo "  make install    - Install dependencies"
-	@echo "  make dev        - Start development server (http://localhost:3000)"
-	@echo "  make build      - Build for production"
-	@echo "  make preview    - Preview production build"
-	@echo "  make clean      - Clean build artifacts and dependencies"
-	@echo "  make status     - Show project status"
-	@echo "  make help       - Show this help message"
+	@echo "Targets:"
+	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-25s %s\n", $$1, $$2}'
+
+w1-start: ## Start w1 project (backend + frontend preview)
+	@echo "Starting Project Alpha..."
+	@cd $(BACKEND_DIR) && uv run uvicorn app.main:app --host 0.0.0.0 --port 8000 > /dev/null 2>&1 & echo $$! > ../$(PID_FILE).backend
+	@sleep 2
+	@cd $(FRONTEND_DIR) && yarn preview --host 0.0.0.0 --port 5173 > /dev/null 2>&1 & echo $$! > ../$(PID_FILE).frontend
 	@echo ""
-	@echo "════════════════════════════════════════════════════════════"
-
-# Install dependencies
-install:
-	@echo "📦 Installing dependencies..."
-	@cd presentations && yarn
-	@echo "✅ Dependencies installed successfully!"
-
-# Start development server
-dev:
-	@echo "🚀 Starting development server..."
-	@echo "📍 Opening http://localhost:3000"
-	@cd presentations && yarn dev
-
-# Build for production
-build:
-	@echo "🔨 Building for production..."
-	@cd presentations && yarn build
-	@echo "✅ Build completed! Output in presentations/dist/"
-
-# Preview production build
-preview:
-	@echo "👀 Starting preview server..."
-		@cd presentations && yarn preview
-
-# Clean build artifacts and node_modules
-clean:
-	@echo "🧹 Cleaning build artifacts..."
-	@rm -rf presentations/dist
-	@rm -rf presentations/node_modules
-	@echo "✅ Cleaned successfully!"
-
-# Show project status
-status:
-	@echo "════════════════════════════════════════════════════════════"
-	@echo "  Project Status"
-	@echo "════════════════════════════════════════════════════════════"
+	@echo "=========================================="
+	@echo "Project Alpha is running!"
+	@echo "=========================================="
+	@echo "Backend PID: $$(cat $(PROJECT_DIR)/$(PID_FILE).backend 2>/dev/null || echo 'N/A')"
+	@echo "Frontend PID: $$(cat $(PROJECT_DIR)/$(PID_FILE).frontend 2>/dev/null || echo 'N/A')"
 	@echo ""
-	@echo "📂 Project Directory: presentations/"
+	@echo "Frontend: http://localhost:5173"
+	@echo "Backend: http://localhost:8000"
+	@echo "API Docs: http://localhost:8000/api/v1/docs"
 	@echo ""
-	@if [ -d "presentations/node_modules" ]; then \
-		echo "✅ Dependencies: Installed"; \
-	else \
-		echo "❌ Dependencies: Not installed (run 'make install')"; \
+	@echo "Press Ctrl+C to stop, or run 'make w1-stop'"
+
+w1-stop: ## Stop w1 project
+	@echo "Stopping Project Alpha..."
+	@# Stop backend by PID file
+	@if [ -f $(PROJECT_DIR)/$(PID_FILE).backend ]; then \
+		PID=$$(cat $(PROJECT_DIR)/$(PID_FILE).backend 2>/dev/null); \
+		if [ -n "$$PID" ] && kill -0 $$PID 2>/dev/null; then \
+			kill $$PID 2>/dev/null && echo "Backend stopped (PID: $$PID)" || echo "Failed to stop backend"; \
+		else \
+			echo "Backend process not running (PID file exists but process not found)"; \
+		fi; \
+		rm -f $(PROJECT_DIR)/$(PID_FILE).backend; \
 	fi
-	@echo ""
-	@if [ -d "presentations/dist" ]; then \
-		echo "✅ Build: Exists"; \
-	else \
-		echo "ℹ️  Build: Not built yet"; \
+	@# Stop frontend by PID file
+	@if [ -f $(PROJECT_DIR)/$(PID_FILE).frontend ]; then \
+		PID=$$(cat $(PROJECT_DIR)/$(PID_FILE).frontend 2>/dev/null); \
+		if [ -n "$$PID" ] && kill -0 $$PID 2>/dev/null; then \
+			kill $$PID 2>/dev/null && echo "Frontend stopped (PID: $$PID)" || echo "Failed to stop frontend"; \
+		else \
+			echo "Frontend process not running (PID file exists but process not found)"; \
+		fi; \
+		rm -f $(PROJECT_DIR)/$(PID_FILE).frontend; \
 	fi
-	@echo ""
-	@echo "📝 Available Presentations:"
-	@find presentations/src/presentations -name "*.mdx" 2>/dev/null | sed 's/.*\//  - /' || echo "  No presentations found"
-	@echo ""
-	@echo "════════════════════════════════════════════════════════════"
+	@# Also kill processes by port (fallback - more reliable)
+	@for PID in $$(lsof -ti:8000 2>/dev/null); do \
+		if [ -n "$$PID" ]; then \
+			kill $$PID 2>/dev/null && echo "Backend stopped by port 8000 (PID: $$PID)" || true; \
+		fi; \
+	done
+	@for PID in $$(lsof -ti:5173 2>/dev/null); do \
+		if [ -n "$$PID" ]; then \
+			kill $$PID 2>/dev/null && echo "Frontend stopped by port 5173 (PID: $$PID)" || true; \
+		fi; \
+	done
+	@# Wait a bit and force kill if still running
+	@sleep 1
+	@for PID in $$(lsof -ti:8000 2>/dev/null); do \
+		if [ -n "$$PID" ]; then \
+			kill -9 $$PID 2>/dev/null && echo "Backend force killed (PID: $$PID)" || true; \
+		fi; \
+	done
+	@for PID in $$(lsof -ti:5173 2>/dev/null); do \
+		if [ -n "$$PID" ]; then \
+			kill -9 $$PID 2>/dev/null && echo "Frontend force killed (PID: $$PID)" || true; \
+		fi; \
+	done
+	@echo "Done"
 
-# Quick start (install + dev)
-start: install dev
+w1-install: ## Install all w1 dependencies
+	@echo "Installing w1 backend dependencies..."
+	@cd $(BACKEND_DIR) && uv sync
+	@echo "Installing w1 frontend dependencies..."
+	@cd $(FRONTEND_DIR) && yarn install
 
-# Rebuild (clean + install + build)
-rebuild: clean install build
+w1-build-frontend: ## Build w1 frontend for production
+	@echo "Building w1 frontend..."
+	@cd $(FRONTEND_DIR) && yarn build
+
+w1-clean: w1-stop ## Clean up w1 PID files and temporary files
+	@echo "Cleaning up w1 project..."
+	@rm -f $(PROJECT_DIR)/$(PID_FILE).backend $(PROJECT_DIR)/$(PID_FILE).frontend
+	@echo "Done"

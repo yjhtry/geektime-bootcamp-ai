@@ -11,3 +11,7 @@ __pycache__/
 .env.production.local
 .venv/
 node_modules/
+
+# PID files
+.pids.*
+w1/project-alpha/.pids.*

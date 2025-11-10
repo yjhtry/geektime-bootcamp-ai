@@ -81,14 +81,21 @@ export default function TicketForm({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px]">
-        <DialogHeader>
-          <DialogTitle>{ticket ? "编辑 Ticket" : "创建 Ticket"}</DialogTitle>
+      <DialogContent className="sm:max-w-[600px] rounded-3xl border-0 shadow-xl p-0">
+        <DialogHeader className="px-8 pt-8 pb-6">
+          <DialogTitle className="text-2xl font-semibold text-[#1d1d1f]">
+            {ticket ? "编辑 Ticket" : "创建 Ticket"}
+          </DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="title">标题 *</Label>
+        <form onSubmit={handleSubmit} className="space-y-6 px-8 pb-8">
+          <div className="space-y-3">
+            <Label
+              htmlFor="title"
+              className="text-[15px] font-medium text-[#1d1d1f]"
+            >
+              标题 *
+            </Label>
             <Input
               id="title"
               value={formData.title}
@@ -98,11 +105,17 @@ export default function TicketForm({
               placeholder="输入 Ticket 标题"
               maxLength={255}
               required
+              className="h-12 rounded-xl border-black/10 bg-[#f5f5f7] text-[15px] focus:bg-white focus:shadow-apple transition-apple"
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="description">描述</Label>
+          <div className="space-y-3">
+            <Label
+              htmlFor="description"
+              className="text-[15px] font-medium text-[#1d1d1f]"
+            >
+              描述
+            </Label>
             <Textarea
               id="description"
               value={formData.description}
@@ -112,25 +125,36 @@ export default function TicketForm({
               placeholder="输入 Ticket 描述（可选）"
               rows={5}
               maxLength={10000}
+              className="rounded-xl border-black/10 bg-[#f5f5f7] text-[15px] focus:bg-white focus:shadow-apple transition-apple resize-none"
             />
           </div>
 
           {!ticket && (
-            <TagSelector
-              selectedTagIds={formData.tag_ids}
-              onChange={(tag_ids) => setFormData({ ...formData, tag_ids })}
-            />
+            <div className="space-y-3">
+              <Label className="text-[15px] font-medium text-[#1d1d1f]">
+                标签
+              </Label>
+              <TagSelector
+                selectedTagIds={formData.tag_ids}
+                onChange={(tag_ids) => setFormData({ ...formData, tag_ids })}
+              />
+            </div>
           )}
 
-          <div className="flex justify-end gap-2">
+          <div className="flex justify-end gap-3 pt-4">
             <Button
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
+              className="h-11 px-6 rounded-full border-black/10 text-[#1d1d1f] font-medium hover:bg-black/5 transition-apple"
             >
               取消
             </Button>
-            <Button type="submit" disabled={isSubmitting}>
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="h-11 px-6 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white font-medium shadow-sm hover:shadow-md transition-apple"
+            >
               {isSubmitting ? "提交中..." : ticket ? "更新" : "创建"}
             </Button>
           </div>

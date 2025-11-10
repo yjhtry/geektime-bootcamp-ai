@@ -33,45 +33,45 @@ export default function TicketCard({
   return (
     <Card
       className={cn(
-        "p-4 transition-all hover:shadow-md",
-        isCompleted && "opacity-60",
-        isSelected && "ring-2 ring-blue-500",
+        "p-6 transition-apple border-0 shadow-apple hover:shadow-apple-hover bg-white rounded-2xl",
+        isCompleted && "opacity-75",
+        isSelected && "ring-2 ring-[#0071e3] ring-offset-2",
       )}
     >
-      <div className="flex items-start gap-3">
+      <div className="flex items-start gap-4">
         {showCheckbox && onSelect ? (
           <Checkbox
             checked={isSelected}
             onCheckedChange={(checked) =>
               onSelect(ticket.id, checked as boolean)
             }
-            className="mt-1"
+            className="mt-0.5 h-5 w-5"
           />
         ) : (
           <Checkbox
             checked={isCompleted}
             onCheckedChange={() => onToggleComplete(ticket)}
-            className="mt-1"
+            className="mt-0.5 h-5 w-5 transition-apple"
           />
         )}
 
-        <div className="flex-1 space-y-2">
-          <div className="flex items-start justify-between gap-2">
+        <div className="flex-1 space-y-3 min-w-0">
+          <div className="flex items-start justify-between gap-4">
             <h3
               className={cn(
-                "text-lg font-semibold",
-                isCompleted && "line-through text-gray-500",
+                "text-xl font-semibold text-[#1d1d1f] leading-tight",
+                isCompleted && "line-through text-[#86868b]",
               )}
             >
               {ticket.title}
             </h3>
 
-            <div className="flex gap-1">
+            <div className="flex gap-1 flex-shrink-0">
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => onEdit(ticket)}
-                className="h-8 w-8"
+                className="h-9 w-9 rounded-full transition-apple hover:bg-black/5 text-[#1d1d1f]"
               >
                 <Edit className="h-4 w-4" />
               </Button>
@@ -79,7 +79,7 @@ export default function TicketCard({
                 variant="ghost"
                 size="icon"
                 onClick={() => onDelete(ticket)}
-                className="h-8 w-8 text-red-600 hover:text-red-700"
+                className="h-9 w-9 rounded-full transition-apple hover:bg-red-50 text-[#ff3b30] hover:text-[#ff453a]"
               >
                 <Trash2 className="h-4 w-4" />
               </Button>
@@ -87,13 +87,13 @@ export default function TicketCard({
           </div>
 
           {ticket.description && (
-            <p className="text-sm text-gray-600 line-clamp-2">
+            <p className="text-[15px] text-[#86868b] leading-relaxed line-clamp-2">
               {ticket.description}
             </p>
           )}
 
           {ticket.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 pt-1">
               {ticket.tags.map((tag) => (
                 <TagBadge
                   key={tag.id}
@@ -109,7 +109,7 @@ export default function TicketCard({
             </div>
           )}
 
-          <div className="flex items-center gap-4 text-xs text-gray-500">
+          <div className="flex items-center gap-6 text-[13px] text-[#86868b] pt-2">
             <span>
               创建于 {format(new Date(ticket.created_at), "yyyy-MM-dd HH:mm")}
             </span>

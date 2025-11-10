@@ -45,30 +45,29 @@ export default function TagSelector({
   };
 
   return (
-    <div className="space-y-2">
-      <Label>标签</Label>
+    <div className="space-y-3">
+      <Label className="text-[15px] font-medium text-[#1d1d1f]">标签</Label>
 
       {/* Selected Tags */}
-      <div className="flex flex-wrap gap-2 min-h-[40px] p-2 border rounded-md">
+      <div className="flex flex-wrap gap-2 min-h-[48px] p-3 border-0 rounded-xl bg-[#f5f5f7] focus-within:bg-white focus-within:shadow-apple transition-apple">
         {selectedTags.map((tag) => (
           <Badge
             key={tag.id}
             variant="secondary"
-            className="inline-flex items-center gap-1"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[13px] font-medium border-0 transition-apple hover:opacity-80"
             style={{
-              backgroundColor: tag.color + "20",
+              backgroundColor: tag.color + "15",
               color: tag.color,
-              borderColor: tag.color,
             }}
           >
             <div
-              className="h-2 w-2 rounded-full"
+              className="h-2 w-2 rounded-full flex-shrink-0"
               style={{ backgroundColor: tag.color }}
             />
             <span>{tag.name}</span>
             <button
               onClick={() => handleRemoveTag(tag.id)}
-              className="ml-1 hover:text-red-600"
+              className="ml-0.5 hover:opacity-70 transition-apple rounded-full p-0.5"
             >
               <X className="h-3 w-3" />
             </button>
@@ -78,18 +77,26 @@ export default function TagSelector({
         {/* Add Tag Popover */}
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
-            <Button variant="outline" size="sm" className="h-6">
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 px-3 rounded-full border-black/10 text-[#0071e3] hover:text-[#0077ed] hover:bg-[#0071e3]/10 transition-apple"
+            >
               <Plus className="h-3 w-3 mr-1" />
               添加标签
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-64 p-3" align="start">
+          <PopoverContent
+            className="w-64 p-4 rounded-xl border-0 shadow-apple"
+            align="start"
+          >
             <div className="space-y-3">
               <Input
                 placeholder="搜索标签..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 autoFocus
+                className="h-10 rounded-xl border-black/10 bg-[#f5f5f7] text-[15px] focus:bg-white focus:shadow-apple transition-apple"
               />
 
               <div className="max-h-48 overflow-y-auto space-y-1">
@@ -101,17 +108,17 @@ export default function TagSelector({
                         handleAddTag(tag.id);
                         setOpen(false);
                       }}
-                      className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-gray-100 text-sm"
+                      className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-black/5 text-[15px] font-medium text-[#1d1d1f] transition-apple"
                     >
                       <div
-                        className="h-3 w-3 rounded-full"
+                        className="h-3 w-3 rounded-full flex-shrink-0"
                         style={{ backgroundColor: tag.color }}
                       />
                       <span>{tag.name}</span>
                     </button>
                   ))
                 ) : (
-                  <p className="text-sm text-gray-500 text-center py-2">
+                  <p className="text-[15px] text-[#86868b] text-center py-4">
                     没有找到标签
                   </p>
                 )}

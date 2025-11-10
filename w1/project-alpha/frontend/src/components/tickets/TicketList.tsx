@@ -33,7 +33,7 @@ export default function TicketList({ onEdit, onDelete }: TicketListProps) {
     return (
       <div className="space-y-4">
         {[1, 2, 3].map((i) => (
-          <Skeleton key={i} className="h-32 w-full" />
+          <Skeleton key={i} className="h-40 w-full rounded-2xl bg-white/50" />
         ))}
       </div>
     );
@@ -41,10 +41,12 @@ export default function TicketList({ onEdit, onDelete }: TicketListProps) {
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center py-12 text-center">
-        <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
-        <p className="text-lg font-semibold text-gray-700">加载失败</p>
-        <p className="text-sm text-gray-500">{error}</p>
+      <div className="flex flex-col items-center justify-center py-24 text-center">
+        <div className="rounded-full bg-red-50 p-4 mb-6">
+          <AlertCircle className="h-8 w-8 text-[#ff3b30]" />
+        </div>
+        <p className="text-xl font-semibold text-[#1d1d1f] mb-2">加载失败</p>
+        <p className="text-[15px] text-[#86868b]">{error}</p>
       </div>
     );
   }
@@ -64,23 +66,27 @@ export default function TicketList({ onEdit, onDelete }: TicketListProps) {
 
   if (tickets.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-12 text-center">
-        <Inbox className="h-16 w-16 text-gray-300 mb-4" />
-        <p className="text-lg font-semibold text-gray-700">暂无 Ticket</p>
-        <p className="text-sm text-gray-500">点击右上角按钮创建新的 Ticket</p>
+      <div className="flex flex-col items-center justify-center py-24 text-center">
+        <div className="rounded-full bg-[#f5f5f7] p-6 mb-6">
+          <Inbox className="h-12 w-12 text-[#86868b]" />
+        </div>
+        <p className="text-xl font-semibold text-[#1d1d1f] mb-2">暂无 Ticket</p>
+        <p className="text-[15px] text-[#86868b]">
+          点击右上角按钮创建新的 Ticket
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6 max-w-4xl mx-auto">
       {/* Toolbar */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           {!isBatchMode && (
             <button
               onClick={() => setIsBatchMode(true)}
-              className="text-sm text-gray-600 hover:text-gray-900"
+              className="text-[15px] text-[#0071e3] hover:text-[#0077ed] font-medium transition-apple"
             >
               批量操作
             </button>
@@ -98,7 +104,7 @@ export default function TicketList({ onEdit, onDelete }: TicketListProps) {
       )}
 
       {/* Ticket List */}
-      <div className="space-y-4">
+      <div className="space-y-3">
         {tickets.map((ticket) => (
           <TicketCard
             key={ticket.id}

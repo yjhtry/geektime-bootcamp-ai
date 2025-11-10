@@ -85,7 +85,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#f5f5f7]">
       <Header
         onNewTicket={handleNewTicket}
         onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -95,7 +95,7 @@ export default function App() {
       {/* Mobile Overlay */}
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-20 lg:hidden"
+          className="fixed inset-0 bg-black/40 backdrop-apple z-20 lg:hidden transition-apple"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
@@ -105,7 +105,7 @@ export default function App() {
           isOpen={isSidebarOpen}
           onClose={() => setIsSidebarOpen(false)}
         />
-        <main className="flex-1 p-4 md:p-6 lg:ml-0">
+        <main className="flex-1 p-6 md:p-8 lg:p-12 lg:ml-0 w-full">
           <TicketList onEdit={handleEditTicket} onDelete={handleDeleteTicket} />
         </main>
       </div>

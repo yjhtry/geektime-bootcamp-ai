@@ -16,15 +16,14 @@ export default function TagBadge({
   return (
     <Badge
       variant="secondary"
-      className="inline-flex items-center gap-1"
+      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[13px] font-medium transition-apple hover:opacity-80 border-0"
       style={{
-        backgroundColor: tag.color + "20",
+        backgroundColor: tag.color + "15",
         color: tag.color,
-        borderColor: tag.color,
       }}
     >
       <div
-        className="h-2 w-2 rounded-full"
+        className="h-2 w-2 rounded-full flex-shrink-0"
         style={{ backgroundColor: tag.color }}
       />
       <span>{tag.name}</span>
@@ -34,7 +33,7 @@ export default function TagBadge({
             e.stopPropagation();
             onRemove();
           }}
-          className="ml-1 hover:text-red-600"
+          className="ml-0.5 hover:opacity-70 transition-apple rounded-full p-0.5"
         >
           <X className="h-3 w-3" />
         </button>

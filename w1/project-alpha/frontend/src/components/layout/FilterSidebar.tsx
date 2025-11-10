@@ -33,31 +33,38 @@ export default function FilterSidebar({
   return (
     <aside
       className={cn(
-        "w-64 border-r bg-gray-50 p-4 transition-transform",
+        "w-72 border-r border-black/5 bg-white/80 backdrop-apple p-6 transition-apple-slow",
         "lg:translate-x-0 lg:static lg:z-auto",
         isOpen ? "translate-x-0" : "-translate-x-full",
         "fixed inset-y-0 left-0 z-30 lg:relative",
       )}
     >
       {onClose && (
-        <div className="flex justify-end mb-4 lg:hidden">
-          <Button variant="ghost" size="icon" onClick={onClose}>
+        <div className="flex justify-end mb-6 lg:hidden">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onClose}
+            className="h-10 w-10 rounded-full transition-apple hover:bg-black/5"
+          >
             <X className="h-5 w-5" />
           </Button>
         </div>
       )}
-      <div className="space-y-6">
+      <div className="space-y-8">
         {/* Status Filter */}
         <div>
-          <h3 className="mb-3 font-semibold text-gray-700">状态</h3>
-          <div className="space-y-2">
+          <h3 className="mb-4 text-[13px] font-semibold text-[#86868b] uppercase tracking-wide">
+            状态
+          </h3>
+          <div className="space-y-1.5">
             <button
               onClick={() => setStatusFilter("all")}
               className={cn(
-                "flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors",
+                "flex w-full items-center gap-3 rounded-xl px-4 py-3 text-[15px] font-medium transition-apple",
                 statusFilter === "all"
-                  ? "bg-blue-100 text-blue-700"
-                  : "text-gray-600 hover:bg-gray-100",
+                  ? "bg-[#0071e3] text-white shadow-sm"
+                  : "text-[#1d1d1f] hover:bg-black/5",
               )}
             >
               <ListTodo className="h-4 w-4" />
@@ -66,10 +73,10 @@ export default function FilterSidebar({
             <button
               onClick={() => setStatusFilter("pending")}
               className={cn(
-                "flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors",
+                "flex w-full items-center gap-3 rounded-xl px-4 py-3 text-[15px] font-medium transition-apple",
                 statusFilter === "pending"
-                  ? "bg-blue-100 text-blue-700"
-                  : "text-gray-600 hover:bg-gray-100",
+                  ? "bg-[#0071e3] text-white shadow-sm"
+                  : "text-[#1d1d1f] hover:bg-black/5",
               )}
             >
               <Circle className="h-4 w-4" />
@@ -78,10 +85,10 @@ export default function FilterSidebar({
             <button
               onClick={() => setStatusFilter("completed")}
               className={cn(
-                "flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors",
+                "flex w-full items-center gap-3 rounded-xl px-4 py-3 text-[15px] font-medium transition-apple",
                 statusFilter === "completed"
-                  ? "bg-blue-100 text-blue-700"
-                  : "text-gray-600 hover:bg-gray-100",
+                  ? "bg-[#0071e3] text-white shadow-sm"
+                  : "text-[#1d1d1f] hover:bg-black/5",
               )}
             >
               <CheckCircle2 className="h-4 w-4" />
@@ -92,27 +99,29 @@ export default function FilterSidebar({
 
         {/* Tags Filter */}
         <div>
-          <h3 className="mb-3 font-semibold text-gray-700">标签</h3>
-          <div className="space-y-2 max-h-96 overflow-y-auto">
+          <h3 className="mb-4 text-[13px] font-semibold text-[#86868b] uppercase tracking-wide">
+            标签
+          </h3>
+          <div className="space-y-1.5 max-h-96 overflow-y-auto pr-2">
             {tags.map((tag) => (
               <button
                 key={tag.id}
                 onClick={() => toggleTagSelection(tag.id)}
                 className={cn(
-                  "flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors",
+                  "flex w-full items-center justify-between rounded-xl px-4 py-2.5 text-[15px] transition-apple",
                   selectedTagIds.includes(tag.id)
-                    ? "bg-blue-100"
-                    : "hover:bg-gray-100",
+                    ? "bg-[#0071e3]/10 text-[#0071e3]"
+                    : "text-[#1d1d1f] hover:bg-black/5",
                 )}
               >
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                   <div
-                    className="h-3 w-3 rounded-full"
+                    className="h-3 w-3 rounded-full flex-shrink-0"
                     style={{ backgroundColor: tag.color }}
                   />
-                  <span>{tag.name}</span>
+                  <span className="font-medium">{tag.name}</span>
                 </div>
-                <span className="text-xs text-gray-500">
+                <span className="text-[13px] text-[#86868b] font-medium">
                   {tag.ticket_count || 0}
                 </span>
               </button>
@@ -124,9 +133,9 @@ export default function FilterSidebar({
         {(statusFilter !== "all" || selectedTagIds.length > 0) && (
           <Button
             variant="outline"
-            size="sm"
+            size="default"
             onClick={reset}
-            className="w-full"
+            className="w-full h-11 rounded-full border-black/10 text-[#1d1d1f] font-medium hover:bg-black/5 transition-apple"
           >
             清除筛选
           </Button>
